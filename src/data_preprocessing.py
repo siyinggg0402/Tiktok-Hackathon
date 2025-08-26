@@ -7,6 +7,7 @@ import sys
 import argparse
 import os
 import csv
+import helper
 
 # first load the json type into the wanted type 
 def load_json(file_path):
@@ -46,8 +47,13 @@ def match_metadata_reviews(metadata, reviews):
     cleaned_df = cleaned_df[cleaned_df["text"].str.lower() != "none"]
     # remove rows with null values in critical columns
     #cleaned_df = merged_df.dropna(subset=['name', 'category', 'latitude', 'longitude','text','hours'])
+    for idx, row in cleaned_df.iterrows():
+        cleaned_df.at[idx, "time"] = helper.unix_to_vermont_time(int(row["time"])//1000)
+        cleaned_df.at[idx, "text"] = helper.normalize_whitespace(row["text"])
+        cleaned_df.at[idx, "text"] = helper.standardize_quotes_dashes(row["text"])
 
     return cleaned_df
+
 
 def main():
     meta = pd.read_json("../data/meta-Vermont.json", lines=True)
