@@ -9,16 +9,6 @@ import os
 import csv
 import helper
 
-# first load the json type into the wanted type 
-def load_json(file_path):
-    with open(file_path, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-    return data
-
-# match the gmap id together, and then keep the columns with longgitude latitude, name of the place, and category, opening hours
-# to check that if the opening hours have u2013, need to change it to - 
-# then after that clean and remove any extras 
-
 def match_metadata_reviews(metadata, reviews):
 
     merged_df = pd.merge(metadata, reviews, on='gmap_id', how='inner')
