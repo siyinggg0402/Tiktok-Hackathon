@@ -1,0 +1,62 @@
+# clean and remove null values
+# match the metadata and review to the corresponding 
+import pandas as pd
+import numpy as np
+import json
+import sys
+import argparse
+import os
+import csv
+
+# first load the json type into the wanted type 
+def load_json(file_path):
+    with open(file_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+    return data
+
+# match the gmap id together, and then keep the columns with longgitude latitude, name of the place, and category, opening hours
+# to check that if the opening hours have u2013, need to change it to - 
+# then after that clean and remove any extras 
+
+def match_metadata_reviews(metadata, reviews):
+
+    merged_df = pd.merge(metadata, reviews, on='gmap_id', how='inner')
+
+    # clean opening_hours column
+    #merged_df['hours'] = merged_df['hours'].apply(lambda x: x.replace('\u2013', '-') if isinstance(x, str) else x)
+    #merged_df['text'] = merged_df['text'].apply(lambda x: x.replace('\n', ' ') if isinstance(x, str) else x)
+    #merged_df['text'] = merged_df['text'].apply(lambda x: x.replace('\u2019', '`') if isinstance(x, str) else x)
+    #merged_df = re.sub(r"\s*/u\w+\s*", " ", merged_df['text']).strip()
+
+    merged_df["text"] = (
+    merged_df["text"]
+      .astype(str)
+      .str.replace("\n", " ", regex=False)
+      .str.replace(r"\u2013", "-", regex=False)
+      .str.replace(r"\u2019", "`", regex=False)
+      .str.replace(r"\s*/u\w+\s*", " ", regex=True)
+      .str.replace(r"\s+", " ", regex=True)
+      .str.strip()
+)
+    print(merged_df.head())
+    cleaned_df = merged_df.drop(columns=["num_of_reviews", "avg_rating","price","MISC","state","user_id","relative_results","url","description","user_id","name_y","pics", "resp"])
+    cleaned_df = cleaned_df.rename(columns={"name_x": "name"})
+    cleaned_df = cleaned_df.dropna()
+    cleaned_df = cleaned_df.drop_duplicates(subset=["text"], keep="first")
+    cleaned_df = cleaned_df[cleaned_df["text"].str.lower() != "none"]
+    # remove rows with null values in critical columns
+    #cleaned_df = merged_df.dropna(subset=['name', 'category', 'latitude', 'longitude','text','hours'])
+
+    return cleaned_df
+
+def main():
+    meta = pd.read_json("../data/meta-Vermont.json", lines=True)
+    reviews = pd.read_json("../data/review-Vermont.json",lines= True)
+    cleaned = match_metadata_reviews(meta,reviews)
+    output_dir = "../cleaned_data"
+    os.makedirs(output_dir, exist_ok=True)
+    output_file = os.path.join(output_dir, "cleaned_reviews.csv")
+    cleaned.to_csv(output_file, index=False, encoding="utf-8", quoting=csv.QUOTE_ALL)
+
+if __name__ == "__main__":
+    main()
