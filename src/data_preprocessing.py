@@ -41,6 +41,7 @@ def match_metadata_reviews(metadata, reviews):
         cleaned_df.at[idx, "time"] = helper.unix_to_vermont_time(int(row["time"])//1000)
         cleaned_df.at[idx, "text"] = helper.normalize_whitespace(row["text"])
         cleaned_df.at[idx, "text"] = helper.standardize_quotes_dashes(row["text"])
+        cleaned_df.at[idx, "text"] = helper.clean_emojis(row["text"])
 
     return cleaned_df
 
