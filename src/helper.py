@@ -1,6 +1,8 @@
 import re
 from datetime import datetime
 from zoneinfo import ZoneInfo
+import emoji
+import re
 
 ### TEXT-CLEANING AND NORMALISATION FUNCTIONS
 
@@ -102,4 +104,28 @@ def has_call_to_action(text: str) -> bool:
     text = text.lower()
     return any(kw in text for kw in cta_keywords)
 
+# cleaning of emojis
+def clean_emojis(text: str) -> str:
+    """
+    Convert emojis (even utf surrogate form) into descriptive words
+    inside square brackets.
+    Example: "\ud83e\udd70" -> "[smiling face with hearts]"
+    """
+    # Step 1: decode surrogate pairs (like \ud83e\udd70) into proper emoji
+    if isinstance(text, str):
+        try:
+            text = text.encode("utf-16", "surrogatepass").decode("utf-16")
+        except UnicodeEncodeError:
+            pass  # if already clean
 
+    # Step 2: convert emoji -> :shortcode: form
+    text = emoji.demojize(text)
+
+    # Step 3: turn :shortcode: into [description]
+    def replace_match(match):
+        desc = match.group(0).strip(":").replace("_", " ")
+        return f"[{desc}]"
+
+    text = re.sub(r":[a-zA-Z0-9_&+\-]+:", replace_match, text)
+
+    return text
