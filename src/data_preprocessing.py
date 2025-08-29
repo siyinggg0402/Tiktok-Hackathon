@@ -10,6 +10,7 @@ import csv
 import helper
 
 def match_metadata_reviews(metadata, reviews):
+    
 
     merged_df = pd.merge(metadata, reviews, on='gmap_id', how='inner')
 
