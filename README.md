@@ -6,7 +6,7 @@ This project applies **machine learning techniques to filter and classify Google
 
 ## Project Structure
 
-.
+```
 ├── data/ # Raw data storage (reviews + metadata)
 │ ├── reviews/ # Downloaded reviews dataset
 │ └── metadata/ # Downloaded metadata dataset
@@ -21,7 +21,7 @@ This project applies **machine learning techniques to filter and classify Google
 │
 ├── requirements.txt # Python dependencies
 └── README.md # Project documentation
-
+```
 ---
 
 ## Dataset
@@ -41,7 +41,7 @@ Store them under the `data/` folder as shown above.
 
 1. **Clone this repository**  
    ```bash
-   git clone https://github.com/<your-username>/<your-repo>.git
-   cd <your-repo>
+   git clone https://github.com/siyinggg0402/Tiktok-Hackathon.git
+   cd Tiktok-Hackathon
 
 Our members, Amelia, Si Ying, Su En and Sze Yui worked on different parts that make up to the project together.
