@@ -26,10 +26,6 @@ def pick_training_rows(df: pd.DataFrame, start_index: int, n: int) -> pd.DataFra
         raise ValueError(f"Data has only {len(df)} rows; cannot start at {start_index}.")
     return df.iloc[start_index:start_index + n]
 
-
-df = pd.read_excel("../cleaned_data/cleaned_reviews.xlsx") 
-df = pick_training_rows(df, start_index=0, n=1000).reset_index(drop=True)
-
 results = []
 
 prompt = [
@@ -191,50 +187,53 @@ def extract(raw_review: str, location: dict, client=None) -> dict:
 
 client = LLMClient()
 
-for i, row in df.iterrows():
-    review_text = row["text"]
-    location = {
-        "name": row["name"],
-        "category": row["category"],
-        "address": row["address"],
-        "open_hours": row["hours"],
-        "timestamp": row["time"]
-    }
+if __name__ == "__main__":
+    df = pd.read_excel("../cleaned_data/cleaned_reviews.xlsx") 
+    df = pick_training_rows(df, start_index=0, n=1000).reset_index(drop=True)
+    for i, row in df.iterrows():
+        review_text = row["text"]
+        location = {
+            "name": row["name"],
+            "category": row["category"],
+            "address": row["address"],
+            "open_hours": row["hours"],
+            "timestamp": row["time"]
+        }
 
-    full_prompt = generate_review_prompt(review_text, location)
-    response = client.call_LLM(full_prompt)
+        full_prompt = generate_review_prompt(review_text, location)
+        response = client.call_LLM(full_prompt)
 
-    if not response:
-        parsed = {"error": "No response", "raw_response": None}
-    else:
-        try:
-            parsed = json.loads(response)
-        except Exception as e:
-            parsed = {"error": str(e), "raw_response": response}
+        if not response:
+            parsed = {"error": "No response", "raw_response": None}
+        else:
+            try:
+                parsed = json.loads(response)
+            except Exception as e:
+                parsed = {"error": str(e), "raw_response": response}
 
-    parsed["row_index"] = i
-    results.append(parsed)
+        parsed["row_index"] = i
+        results.append(parsed)
 
-# Save results
-# Create results dataframe and align it with input
-results_df = pd.DataFrame(results)
+    # Save results
+    # Create results dataframe and align it with input
+    results_df = pd.DataFrame(results)
 
-# Rename result keys with 'res: ' prefix
-results_df = results_df.rename(columns={
-    "Advertisement": "res: Advertisement",
-    "Irrelevant Review": "res: Irrelevant Review",
-    "False Review": "res: False Review",
-    "Vulgar Language": "res: Vulgar Language",
-    "Relevance Score": "res: Relevance Score",
-    "Quality Score": "res: Quality Score",
-    "Extraction Justification": "res: Extraction Justification",
-    "error": "res: error"
-})
+    # Rename result keys with 'res: ' prefix
+    results_df = results_df.rename(columns={
+        "Advertisement": "res: Advertisement",
+        "Irrelevant Review": "res: Irrelevant Review",
+        "False Review": "res: False Review",
+        "Vulgar Language": "res: Vulgar Language",
+        "Relevance Score": "res: Relevance Score",
+        "Quality Score": "res: Quality Score",
+        "Extraction Justification": "res: Extraction Justification",
+        "error": "res: error"
+    })
 
-# Join results with original df using index
-final_df = df.copy()
-results_df.set_index("row_index", inplace=True)
-final_df = final_df.join(results_df, how="left")
+    # Join results with original df using index
+    final_df = df.copy()
+    results_df.set_index("row_index", inplace=True)
+    final_df = final_df.join(results_df, how="left")
 
-# Save
-final_df.to_csv("moderated_reviews_with_results.csv", index=False)
+    # Save
+    final_df.to_csv("moderated_reviews_with_results.csv", index=False)
