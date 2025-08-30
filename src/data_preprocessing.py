@@ -2,9 +2,6 @@
 # match the metadata and review to the corresponding 
 import pandas as pd
 import numpy as np
-import json
-import sys
-import argparse
 import os
 import csv
 import helper

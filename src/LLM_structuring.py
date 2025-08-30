@@ -4,22 +4,6 @@ from textwrap import dedent
 import json
 from copy import deepcopy
 
-### PROCESS:
-#Loads input from Excel.
-
-#Defines a full system prompt with policy/score rules and an example.
-
-#Appends a review to the prompt with metadata per row.
-
-#Calls LLM and parses JSON output.
-
-#Stores each result with row index.
-
-#Merges it back into the original dataframe.
-
-#Saves final output with result columns added.
-
-#load dataset
 #load dataset
 def pick_training_rows(df: pd.DataFrame, start_index: int, n: int) -> pd.DataFrame:
     if len(df) <= start_index:

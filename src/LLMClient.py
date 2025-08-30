@@ -1,6 +1,5 @@
 import os
 from openai import OpenAI
-import logging
 
 class LLMClient: 
     def __init__(self, model: str = "gpt-4o"):

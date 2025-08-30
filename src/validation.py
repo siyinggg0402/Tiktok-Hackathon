@@ -81,7 +81,7 @@ def main():
     if missing:
         raise ValueError(f"CSV must contain columns: {missing}")
 
-    val_df = df.iloc[: min(10, len(df))].copy().reset_index(drop=True)
+    val_df = df.iloc[: min(1002, len(df))].copy().reset_index(drop=True)
 
     client = LLMClient.LLMClient(model="gpt-4o")
 
