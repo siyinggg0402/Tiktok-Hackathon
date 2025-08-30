@@ -20,7 +20,15 @@ from copy import deepcopy
 #Saves final output with result columns added.
 
 #load dataset
+#load dataset
+def pick_training_rows(df: pd.DataFrame, start_index: int, n: int, seed: int = 42) -> pd.DataFrame:
+    if len(df) <= start_index:
+        raise ValueError(f"Data has only {len(df)} rows; cannot start at {start_index}.")
+    return df.iloc[start_index:].sample(n=min(n, len(df) - start_index), random_state=seed)
+
 df = pd.read_excel("../cleaned_data/cleaned_reviews.xlsx") 
+df = pick_training_rows(df, start_index=100, n=1).reset_index(drop=True)
+
 results = []
 
 prompt = [

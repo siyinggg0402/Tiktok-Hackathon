@@ -7,8 +7,8 @@ import LLMClient
 import LLM_structuring
 
 # COLUMN NAMES for the ground truth labels for validation
-GT_RELEVANCE_COL = "Relevance"
-GT_QUALITY_COL   = "Quality"
+GT_RELEVANCE_COL = "Relevance Score"
+GT_QUALITY_COL   = "Quality Score"
 
 # ---- helpers ----
 def extract_json(s: str) -> Dict[str, Any]:
@@ -75,7 +75,7 @@ def main():
 
     out_dir = Path("outputs"); out_dir.mkdir(parents=True, exist_ok=True)
 
-    df = pd.read_excel("../cleaned_data/cleaned_reviews.csv")
+    df = pd.read_excel("../cleaned_data/cleaned_reviews.xlsx")
     needed = {"text", GT_RELEVANCE_COL, GT_QUALITY_COL}
     missing = needed - set(df.columns)
     if missing:
@@ -99,8 +99,8 @@ def main():
         except Exception as e:
             parsed = {"_parse_error": str(e), "_raw": raw}
 
-        pr = normalize_label(parsed.get("relevance"))
-        pq = normalize_label(parsed.get("quality"))
+        pr = normalize_label(parsed.get("Relevance Score"))
+        pq = normalize_label(parsed.get("Quality Score"))
         preds_rel.append(pr)
         preds_qual.append(pq)
 
@@ -115,7 +115,7 @@ def main():
     y_rel = [normalize_label(x) for x in val_df[GT_RELEVANCE_COL].tolist()]
     y_qual = [normalize_label(x) for x in val_df[GT_QUALITY_COL].tolist()]
 
-    labels = ["low", "medium", "high"]  # fixed label order for reports
+    labels = ["low", "average", "high"]  # fixed label order for reports
 
     def report(y_true, y_pred, name):
         acc = accuracy_score(y_true, y_pred)
@@ -127,8 +127,8 @@ def main():
                 "confusion_matrix": confusion_matrix(y_true, y_pred, labels=labels).tolist()}
 
     metrics = {
-        "relevance": report(y_rel, preds_rel, "relevance"),
-        "quality":   report(y_qual, preds_qual, "quality"),
+        "Relevance Score": report(y_rel, preds_rel, "Relevance Score"),
+        "Quality Score":   report(y_qual, preds_qual, "Quality Score"),
     }
 
     with (out_dir / "validation_metrics.json").open("w", encoding="utf-8") as f:
