@@ -128,4 +128,3 @@ def clean_emojis(text: str) -> str:
 
     text = re.sub(r":[a-zA-Z0-9_&+\-]+:", replace_match, text)
 
-    return text

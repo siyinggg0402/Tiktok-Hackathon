@@ -134,7 +134,6 @@ def generate_review_prompt(review_text: str, location: dict) -> list[dict]:
         "content": dedent(f"""
             Review:
             "{review_text}"
-
             Metadata:
             Name: {location.get('name')}
             Category: {location.get('category')}
@@ -174,6 +173,7 @@ def extract(raw_review: str, location: dict, client=None) -> dict:
         parsed = {"error": str(e), "raw_response": response}
 
     return parsed
+
 
 ######################### GET LLM Labelled Results ##########################
 
@@ -226,4 +226,3 @@ final_df = final_df.join(results_df, how="left")
 
 # Save
 final_df.to_csv("moderated_reviews_with_results.csv", index=False)
-
