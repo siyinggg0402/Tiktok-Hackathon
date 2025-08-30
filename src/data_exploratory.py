@@ -62,4 +62,3 @@ pii_cols = ["has_email", "has_phone", "has_telegram", "has_whatsapp", "has_dm_re
 # filter rows where at least one of them is True
 pii_rows = counts_for_flagging[counts_for_flagging[pii_cols].any(axis=1)]
 pii_rows.to_csv("output.csv", index=False, encoding="utf-8")
-

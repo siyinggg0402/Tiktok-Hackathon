@@ -50,4 +50,4 @@ def main():
     cleaned.to_csv(output_file, index=False, encoding="utf-8", quoting=csv.QUOTE_ALL)
 
 if __name__ == "__main__":
-    main()
+

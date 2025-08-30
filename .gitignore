@@ -1,2 +1,4 @@
 *data
 *cleaned_data
+*.venv
+*outputs
