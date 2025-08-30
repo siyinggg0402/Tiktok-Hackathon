@@ -21,13 +21,14 @@ from copy import deepcopy
 
 #load dataset
 #load dataset
-def pick_training_rows(df: pd.DataFrame, start_index: int, n: int, seed: int = 42) -> pd.DataFrame:
+def pick_training_rows(df: pd.DataFrame, start_index: int, n: int) -> pd.DataFrame:
     if len(df) <= start_index:
         raise ValueError(f"Data has only {len(df)} rows; cannot start at {start_index}.")
-    return df.iloc[start_index:].sample(n=min(n, len(df) - start_index), random_state=seed)
+    return df.iloc[start_index:start_index + n]
+
 
 df = pd.read_excel("../cleaned_data/cleaned_reviews.xlsx") 
-df = pick_training_rows(df, start_index=100, n=1).reset_index(drop=True)
+df = pick_training_rows(df, start_index=0, n=1000).reset_index(drop=True)
 
 results = []
 
@@ -45,12 +46,15 @@ prompt = [
                     1. **Advertisement**: 
                         - Reviews containing evidence of promotional language, calls to action, or any URLs/links, would be flagged out as advertising. (e.g. "Interested in your next investment success? Click on "wwww.investsuccess.com" to find out more!", "Join my telegram channel to learn more about fast cash: t.me/FASTCASHTODAYBYEDWARD")
                         - Reviews containing evidence of promotions related to the business itself **should not be flagged out as an advertisement** (e.g. "The restaurant is having a 20% discount right now for all lunch mains! Just quote the promotion "SG60" to get it!").
+                        - Reviews containing evidence of content that is mentioning another business without the intent of promotion **should not be flagged out as an advertisement** (e.g. "The food at Tony's Diner is too pricey! I would rather go Joji's Diner next time.")
                     2. **Irrelevant Review**: 
-                        - Reviews containing evidences of the discussion of topics completely unrelated to the {name} and {category}, should be flagged out as irrelevant. (e.g. if the name of the business is 'Dunkin Donuts' but the review is about 'Krispy Creme', the review is considered as an Irrelevant Review.)
-                        - Reviews containing information about personal experiences, or general commentary that has no connection to the business, should also be flagged out as irrelevant. (e.g. Review containing "I want to get a new phone!" at a restaurant business is considered an Irrelevant Review.)
+                        - Reviews that discuss topics completely unrelated to the business name, category, or the nature of the services/products it provides should be flagged as Irrelevant Reviews.
+                        - Reviews that only contain personal commentary or unrelated intentions (e.g. “I want to get a new phone!”) with no meaningful connection to the business context should be flagged as Irrelevant Reviews.
+                        - However, **reviews that mention experiences, services, or products that are plausibly offered by the business — even if not explicitly listed in the metadata — should NOT be flagged**. For example, mentioning a soda at a sandwich shop is still contextually relevant.
+                        - A review **should not be flagged** if it provides any hint of a real visit, service interaction, or product usage, even if it doesn't exactly match the metadata (e.g., hours or category).
+                        - Use judgment to determine if the review reasonably reflects a customer experience. Don't require exact keyword matches to metadata for it to be considered relevant.
                     3. **False Review**: 
                         - Reviews that come from users who have not visited the location, or that contain fabricated information, are considered violations. (e.g., "I've never been here but I heard this sucks" is considered a False Review.)
-                        
                     4. **Vulgar Language**: 
                         - Reviews that contain vulgar, offensive, or inappropriate language are considered violations. (e.g. "F**k this place", "Sh***y food" should be flagged out as vulgar language)
             

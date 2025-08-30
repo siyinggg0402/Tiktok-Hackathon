@@ -2,3 +2,8 @@
 *cleaned_data
 *.venv
 *outputs
+moderated_reviews_with_results.csv
+src/__pycache__/LLMClient.cpython-312.pyc
+.DS_Store
+.gitignore
+src/__pycache__/LLM_structuring.cpython-312.pyc
