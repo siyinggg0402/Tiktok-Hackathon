@@ -1,7 +1,0 @@
-# ML Filtering of Reviews Based on Location
-
-This project applies **machine learning techniques to filter and classify Google Local reviews based on location metadata**, with the goal of making online reviews more trustworthy. By combining review text with metadata (e.g., business category, region, user history), we aim to detect misleading or irrelevant reviews and improve the reliability of review platforms.
-
----
-
-## Project Structure 

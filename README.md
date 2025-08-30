@@ -1,0 +1,47 @@
+# ML Filtering of Reviews Based on Location
+
+This project applies **machine learning techniques to filter and classify Google Local reviews based on location metadata**, with the goal of making online reviews more trustworthy. By combining review text with metadata (e.g., business category, region, user history), we aim to detect misleading or irrelevant reviews and improve the reliability of review platforms.
+
+---
+
+## Project Structure
+
+.
+├── data/ # Raw data storage (reviews + metadata)
+│ ├── reviews/ # Downloaded reviews dataset
+│ └── metadata/ # Downloaded metadata dataset
+│
+├── cleaned_data/ # Output folder for cleaned review data
+│ └── cleaned_reviews.xlsx
+│
+├── src/ # Source code
+│ ├── data_preprocessing.py # Script to clean and structure raw review data
+│ ├── LLM_structuring.py # Script to run training/structuring cases
+│ └── validation.py # Script to run validation against human-labeled cases
+│
+├── requirements.txt # Python dependencies
+└── README.md # Project documentation
+
+---
+
+## Dataset
+
+We use the **Google Local Reviews dataset** curated by McAuley Lab (UCSD):  
+[Download dataset here](https://mcauleylab.ucsd.edu/public_datasets/gdrive/googlelocal/)
+
+You’ll need to download both:
+- `reviews` dataset  
+- `metadata` dataset  
+You may choose to download the datasets that were from Vermont.
+Store them under the `data/` folder as shown above.
+
+---
+
+## ⚙️ Setup Instructions
+
+1. **Clone this repository**  
+   ```bash
+   git clone https://github.com/<your-username>/<your-repo>.git
+   cd <your-repo>
+
+Our members, Amelia, Si Ying, Su En and Sze Yui worked on different parts that make up to the project together.
