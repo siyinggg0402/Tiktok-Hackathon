@@ -13,12 +13,6 @@ def match_metadata_reviews(metadata, reviews):
 
     merged_df = pd.merge(metadata, reviews, on='gmap_id', how='inner')
 
-    # clean opening_hours column
-    #merged_df['hours'] = merged_df['hours'].apply(lambda x: x.replace('\u2013', '-') if isinstance(x, str) else x)
-    #merged_df['text'] = merged_df['text'].apply(lambda x: x.replace('\n', ' ') if isinstance(x, str) else x)
-    #merged_df['text'] = merged_df['text'].apply(lambda x: x.replace('\u2019', '`') if isinstance(x, str) else x)
-    #merged_df = re.sub(r"\s*/u\w+\s*", " ", merged_df['text']).strip()
-
     merged_df["text"] = (
     merged_df["text"]
       .astype(str)
