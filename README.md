@@ -16,16 +16,14 @@ To address this, we design a pipeline that combines **data preprocessing, LLM-ba
 ### 🔹 LLM-Based Structuring
 - Use a **large language model (LLM)** with prompt engineering and fine-tuning strategies.  
 - Classify reviews into categories such as:
-  - *relevant*  
-  - *irrelevant*  
   - *spam/advertisement*  
   - *rant without visit*  
-  - *genuine feedback*  
-- The LLM captures nuanced text (e.g., sarcasm, off-topic rants) that traditional ML classifiers may miss.  
+  - *false reviews*
+  - *vulgarities*
 - Metadata (e.g., location and business category) is integrated into prompts to make classification **context-aware**, ensuring reviews align with their claimed location.  
 
 ### 🔹 Validation
-- Compare the model’s classifications against a **human-labeled ground truth dataset**.  
+- Compare the model’s classifications against a **human-labeled ground truth labels**.  
 - Evaluate performance using metrics such as:
   - **Accuracy**  
   - **F1-score**  
