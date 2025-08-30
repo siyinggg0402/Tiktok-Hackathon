@@ -38,7 +38,7 @@ def make_messages(review_text: str, location: Dict[str, Any]) -> List[Dict[str, 
             Review:
             \"{review_text}\"
 
-            Location:
+            Metadata:
             Name: {location.get('name')}
             Category: {location.get('category')}
             Address: {location.get('address')}
