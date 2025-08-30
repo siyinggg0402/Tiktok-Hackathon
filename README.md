@@ -72,5 +72,9 @@ Store them under the `data/` folder as shown above.
    ```bash
    git clone https://github.com/siyinggg0402/Tiktok-Hackathon.git
    cd Tiktok-Hackathon
+   
+2. **Setting up of the API key for usage**
+   ```bash
+   export OPENAI_API_KEY= "your API key"
 
 Our members, Amelia, Si Ying, Su En and Sze Yui worked on different parts that make up to the project together.
