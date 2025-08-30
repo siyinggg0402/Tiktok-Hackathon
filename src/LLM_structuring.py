@@ -151,7 +151,7 @@ def generate_review_prompt(review_text: str, location: dict) -> list[dict]:
     return prompt
 
 ######################### GET LLM Labelled Results ##########################
-
+"""
 client = LLMClient()
 
 for i, row in df.iterrows():
@@ -174,3 +174,4 @@ for i, row in df.iterrows():
         parsed = {"error": str(e), "raw_response": response}
 
     results.append(parsed)
+"""

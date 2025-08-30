@@ -3,10 +3,6 @@ from pathlib import Path
 from typing import List, Dict, Any
 import pandas as pd
 from sklearn.metrics import classification_report, confusion_matrix, f1_score, accuracy_score
-
-from dotenv import load_dotenv
-load_dotenv()
-
 import LLMClient
 import LLM_structuring
 
@@ -79,13 +75,13 @@ def main():
 
     out_dir = Path("outputs"); out_dir.mkdir(parents=True, exist_ok=True)
 
-    df = pd.read_csv("../cleaned_data/cleaned_reviews.csv")
+    df = pd.read_excel("../cleaned_data/cleaned_reviews.csv")
     needed = {"text", GT_RELEVANCE_COL, GT_QUALITY_COL}
     missing = needed - set(df.columns)
     if missing:
         raise ValueError(f"CSV must contain columns: {missing}")
 
-    val_df = df.iloc[: min(100, len(df))].copy().reset_index(drop=True)
+    val_df = df.iloc[: min(5, len(df))].copy().reset_index(drop=True)
 
     client = LLMClient.LLMClient(model="gpt-4o")
 
@@ -141,3 +137,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

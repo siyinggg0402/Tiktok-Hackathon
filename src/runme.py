@@ -73,7 +73,7 @@ def main():
     if "text" not in df.columns:
         raise ValueError("CSV must contain a 'text' column with the review text.")
 
-    sample_df = pick_training_rows(df, start_index=100, n=2)
+    sample_df = pick_training_rows(df, start_index=100, n=1)
     sample_df = sample_df.reset_index(drop=True)
 
     # Init LLM
