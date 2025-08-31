@@ -48,7 +48,7 @@ To address this, we design a pipeline that combines **data preprocessing, LLM-ba
 │ ├── LLM_structuring.py # Script to run training/structuring cases
 │ └── validation.py # Script to run validation against human-labeled cases
 │
-├── requirements.txt # Python dependencies
+|
 └── README.md # Project documentation
 ```
 ---
